@@ -9,10 +9,9 @@ require("./db/db");
 
 // middlewares
 app.use(cors({
-  origin: [
-     "http://localhost:5173",
-    "https://shop-bike-d6tiu15ob-bikeshop-s-projects.vercel.app/"
-  ], credentials: true
+  origin: 'https://shop-bike-cax5bcywo-bikeshop-s-projects.vercel.app', // Your specific Vercel URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
