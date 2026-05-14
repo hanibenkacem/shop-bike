@@ -101,6 +101,17 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
           <input type="text" name="title" placeholder="اسم الدراجة" value={form.title} onChange={handleChange} required style={inputStyle} />
           <textarea name="description" placeholder="الوصف" value={form.description} onChange={handleChange} rows="4" style={inputStyle} />
           <input type="number" name="price" placeholder="السعر" value={form.price} onChange={handleChange} required style={inputStyle} />
+          <input 
+  type="number" 
+  name="stock" 
+  placeholder="الكمية المتاحة" 
+  value={form.stock} 
+  onChange={handleChange} 
+  required 
+  style={inputStyle} 
+/>
+<input type="text" name="size" placeholder="المقاس" value={form.size} onChange={handleChange} style={inputStyle} />
+<input type="text" name="color" placeholder="اللون" value={form.color} onChange={handleChange} style={inputStyle} />
           <input type="text" name="brand" placeholder="العلامة التجارية" value={form.brand} onChange={handleChange} style={inputStyle} />
           <input type="text" name="whatsapp_number" placeholder="رقم واتساب" value={form.whatsapp_number} onChange={handleChange} required style={inputStyle} />
 
