@@ -11,7 +11,7 @@ require("./db/db");
 app.use(cors({
   origin: [
      "http://localhost:5173",
-    "https://yourfrontend.vercel.app"
+    "https://shop-bike-d6tiu15ob-bikeshop-s-projects.vercel.app/"
   ], credentials: true
 }));
 app.use(express.json());
