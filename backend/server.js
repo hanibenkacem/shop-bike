@@ -9,7 +9,7 @@ require("./db/db");
 
 // middlewares
 app.use(cors({
-  origin: 'https://shop-bike-eight.vercel.app', // Your specific Vercel URL
+  origin: 'https://shop-bike-eight.vercel.app', // this one is permanent
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
