@@ -435,14 +435,22 @@ export default function ProductDetails() {
 
                 <p className="pd-description">{product.description}</p>
 
-                <a
-                  href={`https://wa.me/${product.whatsapp_number}?text=مرحباً، أريد ${product.title}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="pd-whatsapp"
-                >
-                  📞 تواصل عبر واتساب
-                </a>
+               <a
+  href={`https://wa.me/${product.whatsapp_number}?text=${encodeURIComponent(
+    `مرحباً، أريد طلب هذا المنتج:
+
+📌 المنتج: ${product.title}
+💰 السعر: ${product.price} DA
+
+🔗 الرابط:
+${window.location.href}`
+  )}`}
+  target="_blank"
+  rel="noreferrer"
+  className="pd-whatsapp"
+>
+  📞 تواصل عبر واتساب
+</a>
               </div>
             </div>
 
