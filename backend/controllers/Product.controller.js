@@ -216,6 +216,7 @@ exports.updateProduct = async (req, res) => {
       size,
       color
     } = req.body;
+    const generatedSlug = title.toLowerCase().replace(/ /g, '-') + '-' + Date.now();
 
     await db.query(
       `
@@ -235,7 +236,7 @@ exports.updateProduct = async (req, res) => {
       [
         category_id,
         title,
-        slug,
+        generatedSlug,
         description,
         price,
         stock,
