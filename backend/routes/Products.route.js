@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middleware/AuthMiddleware");
-const upload = require("../middleware/uploadMiddleware");
-
+const { upload } = require("../middleware/uploadMiddleware");
 const {
   createProduct,
   getProducts,
