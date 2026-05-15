@@ -12,7 +12,6 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
     brand: "",
     size: "",
     color: "",
-    whatsapp_number: "+213794434949"
   });
 
   const [images, setImages] = useState([]);
@@ -113,8 +112,6 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
 <input type="text" name="size" placeholder="المقاس" value={form.size} onChange={handleChange} style={inputStyle} />
 <input type="text" name="color" placeholder="اللون" value={form.color} onChange={handleChange} style={inputStyle} />
           <input type="text" name="brand" placeholder="العلامة التجارية" value={form.brand} onChange={handleChange} style={inputStyle} />
-          <input type="text" name="whatsapp_number" placeholder="رقم واتساب" value={form.whatsapp_number} onChange={handleChange} required style={inputStyle} />
-
           <label style={{ display: "block", marginBottom: "10px", fontWeight: "bold" }}>صور المنتج (اختر الصورة الرئيسية):</label>
           <input type="file" multiple onChange={handleImages} style={{ marginBottom: "20px" }} />
 

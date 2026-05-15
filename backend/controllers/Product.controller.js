@@ -18,7 +18,6 @@ exports.createProduct = async (req, res) => {
       size,
       color,
       featured,
-      whatsapp_number,
       mainImageIndex // <--- This is sent from your React modal
     } = req.body;
 
@@ -28,11 +27,11 @@ exports.createProduct = async (req, res) => {
     const [result] = await db.query(
       `
       INSERT INTO products (
-        category_id, title, slug, description, price, stock, brand, size, color, featured, whatsapp_number
+        category_id, title, slug, description, price, stock, brand, size, color, featured
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [category_id, title, slug || generatedSlug, description, price, stock, brand, size, color, featured, whatsapp_number]
+      [category_id, title, slug || generatedSlug, description, price, stock, brand, size, color, featured]
     );
 
     const productId = result.insertId;
@@ -217,8 +216,7 @@ exports.updateProduct = async (req, res) => {
       brand,
       size,
       color,
-      featured,
-      whatsapp_number
+      featured
     } = req.body;
 
     await db.query(
@@ -234,8 +232,7 @@ exports.updateProduct = async (req, res) => {
         brand = ?,
         size = ?,
         color = ?,
-        featured = ?,
-        whatsapp_number = ?
+        featured = ?
       WHERE id = ?
       `,
       [
@@ -249,7 +246,6 @@ exports.updateProduct = async (req, res) => {
         size,
         color,
         featured,
-        whatsapp_number,
         id
       ]
     );
