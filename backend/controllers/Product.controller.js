@@ -21,47 +21,38 @@ exports.createProduct = async (req, res) => {
     } = req.body;
 
     const generatedSlug = title.toLowerCase().replace(/ /g, '-') + '-' + Date.now();
-
+const videoUrl = req.files?.video?.[0]?.path || null;
     // insert product
     const [result] = await db.query(
       `
-      INSERT INTO products (
-        category_id, title, slug, description, price, stock, brand, size, color
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (
+  category_id, title, slug, description, price, stock, brand, size, color, video_url
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
-      [category_id, title, slug || generatedSlug, description, price, stock, brand, size, color]
+      [category_id, title, slug || generatedSlug, description, price, stock, brand, size, color, videoUrl]
     );
 
     const productId = result.insertId;
 
     // save images
-    if (req.files && req.files.length > 0) {
-      // Use a standard for loop to get the index (i)
-      for (let i = 0; i < req.files.length; i++) {
-        const file = req.files[i];
+    const images = req.files?.images || [];
 
-        // Check if the current file index matches the mainImageIndex from React
-        // Note: we use == because mainImageIndex might be a string "0"
-        const isMain = i == mainImageIndex ? 1 : 0;
+if (images.length > 0) {
+  for (let i = 0; i < images.length; i++) {
+    const file = images[i];
 
-        await db.query(
-          `
-          INSERT INTO product_images (
-            product_id,
-            image_url,
-            is_main
-          )
-          VALUES (?, ?, ?)
-          `,
-          [
-            productId,
-            file.path, // or file.filename depending on your Multer storage config
-            isMain
-          ]
-        );
-      }
-    }
+    const isMain = i == mainImageIndex ? 1 : 0;
+
+    await db.query(
+      `
+      INSERT INTO product_images (product_id, image_url, is_main)
+      VALUES (?, ?, ?)
+      `,
+      [productId, file.path, isMain]
+    );
+  }
+}
 
     res.status(201).json({
       message: "Product created successfully",

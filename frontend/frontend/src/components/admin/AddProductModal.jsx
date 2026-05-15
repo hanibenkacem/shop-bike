@@ -18,7 +18,7 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
   // 1. New state to track the main image index
   const [mainImageIndex, setMainImageIndex] = useState(0); 
   const [loading, setLoading] = useState(false);
-
+const [video, setVideo] = useState(null);
   useEffect(() => {
     if (open) {
       fetchCategories();
@@ -62,6 +62,9 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
       for (let i = 0; i < images.length; i++) {
         formData.append("images", images[i]);
       }
+      if (video) {
+  formData.append("video", video);
+}
 
       await API.post("/products", formData, {
         headers: { Authorization: `Bearer ${token}` }
@@ -114,6 +117,16 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
           <input type="text" name="brand" placeholder="العلامة التجارية" value={form.brand} onChange={handleChange} style={inputStyle} />
           <label style={{ display: "block", marginBottom: "10px", fontWeight: "bold" }}>صور المنتج (اختر الصورة الرئيسية):</label>
           <input type="file" multiple onChange={handleImages} style={{ marginBottom: "20px" }} />
+<label style={{ display: "block", fontWeight: "bold", marginTop: "10px" }}>
+  فيديو المنتج (اختياري):
+</label>
+
+<input
+  type="file"
+  accept="video/*"
+  onChange={(e) => setVideo(e.target.files[0])}
+  style={{ marginBottom: "20px" }}
+/>
 
           {/* 3. Preview Section */}
           <div style={{ 

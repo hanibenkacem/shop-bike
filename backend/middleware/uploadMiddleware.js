@@ -11,6 +11,16 @@ const storage = new CloudinaryStorage({
     },
   });
 
+const videoStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "bike-shop/videos",
+    resource_type: "video", // 🔥 REQUIRED
+    allowed_formats: ["mp4", "mov", "avi", "webm"],
+  },
+});
 const upload = multer({ storage });
+const uploadVideo = multer({ storage: videoStorage });
 
-module.exports = upload;
+
+module.exports = { upload, uploadVideo };

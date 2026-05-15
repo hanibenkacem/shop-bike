@@ -15,11 +15,14 @@ const {
 
 // CREATE PRODUCT WITH IMAGES
 router.post(
-    "/",
-    verifyToken,
-    upload.array("images", 10),
-    createProduct
-  );
+  "/",
+  verifyToken,
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "video", maxCount: 1 }
+  ]),
+  createProduct
+);
 
 router.get("/", getProducts);
 
