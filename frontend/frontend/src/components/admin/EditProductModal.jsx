@@ -20,7 +20,6 @@ export default function EditProductModal({
     brand: "",
     size: "",
     color: "",
-    whatsapp_number: ""
   });
 
   useEffect(() => {
@@ -227,14 +226,7 @@ export default function EditProductModal({
             style={inputStyle}
           />
 
-          <input
-            type="text"
-            name="whatsapp_number"
-            placeholder="رقم واتساب"
-            value={form.whatsapp_number}
-            onChange={handleChange}
-            style={inputStyle}
-          />
+         
 
           <button
             type="submit"
