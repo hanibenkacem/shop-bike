@@ -414,6 +414,30 @@ export default function ProductDetails() {
     ))}
   </div>
 )}
+{product.video_url && (
+  <div
+    style={{
+      marginTop: "20px",
+      borderRadius: "14px",
+      overflow: "hidden",
+      border: "1px solid #eee",
+      background: "#000"
+    }}
+  >
+    <video
+      src={product.video_url}
+      controls
+      playsInline
+      preload="metadata"
+      style={{
+        width: "100%",
+        maxHeight: "500px",
+        objectFit: "cover",
+        display: "block"
+      }}
+    />
+  </div>
+)}
               </div>
 
               {/* ── Right side – details ── */}
