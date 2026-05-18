@@ -22,6 +22,7 @@ exports.createProduct = async (req, res) => {
 
     const generatedSlug = title.toLowerCase().replace(/ /g, '-') + '-' + Date.now();
 const videoUrl = req.files?.video?.[0]?.path || null;
+console.log(req.files);
     // insert product
     const [result] = await db.query(
       `

@@ -127,6 +127,28 @@ const [video, setVideo] = useState(null);
   onChange={(e) => setVideo(e.target.files[0])}
   style={{ marginBottom: "20px" }}
 />
+{video && (
+  <div
+    style={{
+      marginBottom: "20px",
+      border: "1px solid #ccc",
+      borderRadius: "10px",
+      overflow: "hidden",
+      maxWidth: "250px"
+    }}
+  >
+    <video
+      src={URL.createObjectURL(video)}
+      controls
+      muted
+      style={{
+        width: "100%",
+        height: "180px",
+        objectFit: "cover"
+      }}
+    />
+  </div>
+)}
 
           {/* 3. Preview Section */}
           <div style={{ 
