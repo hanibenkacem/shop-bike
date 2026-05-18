@@ -33,4 +33,32 @@ router.put("/:id", verifyToken,updateProduct);
 
 router.delete("/:id",verifyToken,deleteProduct);
 
+
+router.post(
+  "/:id/images",
+  verifyToken,
+  upload.fields([{ name: "images", maxCount: 10 }]),
+  addProductImages
+);
+ 
+router.delete(
+  "/:id/images/:imgId",
+  verifyToken,
+  deleteProductImage
+);
+ 
+// ── video management ─────────────────────────────────────────
+router.post(
+  "/:id/video",
+  verifyToken,
+  upload.fields([{ name: "video", maxCount: 1 }]),
+  addProductVideo
+);
+ 
+router.delete(
+  "/:id/video",
+  verifyToken,
+  deleteProductVideo
+);
+ 
 module.exports = router;
