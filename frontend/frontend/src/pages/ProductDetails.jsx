@@ -5,11 +5,25 @@ import MainLayout from "../layouts/MainLayout";
 
 /* ── Store-wide social links – edit these once ── */
 const SOCIAL = {
-  instagram: "https://instagram.com/your_handle",
+  instagram: "https://www.instagram.com/worldbikesetif",
   tiktok:    "https://www.tiktok.com/@issam.cycle",
   facebook:  "https://www.facebook.com/groups/1439452979687628/user/100056417477627/",
   whatsapp:  null,   // filled dynamically from product.whatsapp_number
 };
+
+/* ── Shop locations ── */
+const SHOPS = [
+  {
+    name:   "World Bike 1",
+    mapUrl: "https://maps.app.goo.gl/ddCJXD9acyNx6KuYA",
+    coords: "36.2072173, 5.4465243",
+  },
+  {
+    name:   "World Bike 2",
+    mapUrl: "https://maps.app.goo.gl/HbmHcPMqdAJec6eJ6",
+    coords: "36.2063963, 5.4178767",
+  },
+];
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
@@ -260,6 +274,68 @@ const css = `
   }
 
   /* ════════════════════════════════════════
+     SHOPS LOCATIONS SECTION
+  ════════════════════════════════════════ */
+  .pd-shops-section {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .pd-shops-grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .pd-shop-card {
+    flex: 1 1 220px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fafafa;
+    border-radius: 14px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: 0.2s;
+  }
+  .pd-shop-card:hover {
+    border-color: var(--accent-orange);
+    box-shadow: 0 4px 16px rgba(240,78,35,0.12);
+    transform: translateY(-2px);
+  }
+
+  .pd-shop-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .pd-shop-info { display: flex; flex-direction: column; gap: 2px; }
+
+  .pd-shop-name {
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--primary-dark);
+  }
+
+  .pd-shop-coords {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    direction: ltr;
+  }
+
+  .pd-shop-link-label {
+    font-size: 0.82rem;
+    color: var(--accent-orange);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ════════════════════════════════════════
      SOCIAL MEDIA SECTION (bottom)
   ════════════════════════════════════════ */
   .pd-social-section {
@@ -344,6 +420,7 @@ const css = `
     .pd-price { font-size: 1.4rem; }
     .pd-lens  { width: 100px; height: 100px; }
     .pd-desc-section { padding: 1.5rem 1.25rem; }
+    .pd-shops-section { padding: 1.5rem 1.25rem; }
     .pd-social-section { padding: 1.5rem 1.25rem; }
     .pd-social-links { gap: 10px; }
     .pd-social-btn { padding: 10px 14px; font-size: 0.85rem; }
@@ -557,6 +634,29 @@ export default function ProductDetails() {
                 </ul>
               </div>
             )}
+
+            {/* ════════════════ SHOP LOCATIONS ════════════════ */}
+            <div className="pd-shops-section">
+              <h2 className="pd-section-title">📍 مواقع متاجرنا</h2>
+              <div className="pd-shops-grid">
+                {SHOPS.map((shop) => (
+                  <a
+                    key={shop.name}
+                    href={shop.mapUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pd-shop-card"
+                  >
+                    <span className="pd-shop-icon">🏪</span>
+                    <div className="pd-shop-info">
+                      <span className="pd-shop-name">{shop.name}</span>
+                      <span className="pd-shop-coords">{shop.coords}</span>
+                      <span className="pd-shop-link-label">فتح في الخريطة ←</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
 
             {/* ════════════════ SOCIAL MEDIA ════════════════ */}
             <div className="pd-social-section">
