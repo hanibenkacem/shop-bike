@@ -183,6 +183,7 @@ const WhatsAppIcon = () => (
 
 export default function Home() {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCategories();
@@ -195,6 +196,9 @@ export default function Home() {
       setCategories(res.data);
     } catch (error) {
       console.error(error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -213,19 +217,33 @@ export default function Home() {
             <h1 style={{ fontSize: "40px", marginBottom: "30px", fontWeight: "800" }}>
               الفئات
             </h1>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "20px",
-                alignItems: "stretch"
-              }}
-            >
-              {categories.map(category => (
-                <CategoryCard key={category.id} category={category} />
-              ))}
-            </div>
+            {loading ? (
+  <div style={{
+    textAlign: "center",
+    padding: "60px 20px",
+    background: "#fff",
+    borderRadius: "16px",
+    border: "1px dashed #ddd",
+    color: "#888",
+    fontSize: "1.1rem",
+    fontWeight: "600",
+    letterSpacing: "0.01em"
+  }}>
+    <div style={{ fontSize: "2rem", marginBottom: "12px" }}>⏳</div>
+    جاري تحميل الفئات، يرجى الانتظار بضع ثوانٍ...
+  </div>
+) : (
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: "20px",
+    alignItems: "stretch"
+  }}>
+    {categories.map(category => (
+      <CategoryCard key={category.id} category={category} />
+    ))}
+  </div>
+)}
           </section>
 
           {/* ════════════════ SHOP LOCATIONS ════════════════ */}
