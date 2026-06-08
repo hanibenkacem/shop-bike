@@ -224,7 +224,6 @@ export default function ProductCard({ product }) {
                 className="pc-img"
                 loading="lazy"
               />
-              <div className="pc-img-overlay" />
               {(product.category_name || product.category?.name) && (
                 <span className="pc-chip">
                   {product.category_name || product.category.name}
