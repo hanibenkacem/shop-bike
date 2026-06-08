@@ -174,6 +174,37 @@ const css = `
   .adm-product-info p  { color: #555; margin: 0; font-weight: 600; font-size: 0.9rem; }
 
   .adm-product-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  /* ── Checkbox ── */
+  .adm-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #cc2222;
+    flex-shrink: 0;
+  }
+
+  /* ── Bulk delete bar ── */
+  .adm-bulk-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff1f1;
+    border: 1px solid #ffc5c5;
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .adm-bulk-bar span { font-weight: 600; color: #cc2222; font-size: 0.95rem; }
+  .adm-btn-select-all {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #444;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+  }
+  .adm-btn-select-all:hover { border-color: #999; }
 
   /* ── Empty state ── */
   .adm-empty {
@@ -213,6 +244,8 @@ export default function Dashboard() {
   const [openAddCategory, setOpenAddCategory]   = useState(false);
   const [openEditCategory, setOpenEditCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedIds, setSelectedIds] = useState([]);
+
 
   useEffect(() => {
     fetchProducts();
@@ -330,90 +363,114 @@ export default function Dashboard() {
   const renderDetail = () => {
     const cat = activeCategory;
     const catProducts = productsInCategory(cat.id);
-
+    const allSelected = catProducts.length > 0 && catProducts.every(p => selectedIds.includes(p.id));
+  
+    const toggleSelect = (id) =>
+      setSelectedIds(prev =>
+        prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+      );
+  
+    const toggleSelectAll = () =>
+      setSelectedIds(allSelected ? [] : catProducts.map(p => p.id));
+  
+    const deleteSelected = async () => {
+      if (!window.confirm(`هل تريد حذف ${selectedIds.length} منتج ؟`)) return;
+      try {
+        await Promise.all(
+          selectedIds.map(id =>
+            API.delete(`/products/${id}`, {
+              headers: { Authorization: `Bearer ${getToken()}` },
+            })
+          )
+        );
+        setSelectedIds([]);
+        await fetchProducts();
+      } catch (err) {
+        console.error(err);
+        alert("حدث خطأ أثناء الحذف");
+      }
+    };
+  
     return (
       <>
         {/* Back */}
-        <button className="adm-back" onClick={() => setActiveCategory(null)}>
+        <button className="adm-back" onClick={() => { setActiveCategory(null); setSelectedIds([]); }}>
           &#8592; العودة إلى الفئات
         </button>
-
+  
         {/* Category header card */}
         <div className="adm-detail-header">
           <div className="adm-detail-header-left">
-            <img
-              src={cat.image}
-              alt={cat.name}
-              className="adm-detail-img"
-            />
+            <img src={cat.image} alt={cat.name} className="adm-detail-img" />
             <div>
               <p className="adm-detail-title">{cat.name}</p>
               <p className="adm-detail-subtitle">{catProducts.length} منتج في هذه الفئة</p>
             </div>
           </div>
-
           <div style={{ display: "flex", gap: 10 }}>
-            <button
-              className="adm-btn-base adm-btn-edit"
-              onClick={() => {
-                setSelectedCategory(cat);
-                setOpenEditCategory(true);
-              }}
-            >
+            <button className="adm-btn-base adm-btn-edit" onClick={() => { setSelectedCategory(cat); setOpenEditCategory(true); }}>
               تعديل الفئة
             </button>
-            <button
-              className="adm-btn-base adm-btn-delete"
-              onClick={() => deleteCategory(cat.id)}
-            >
+            <button className="adm-btn-base adm-btn-delete" onClick={() => deleteCategory(cat.id)}>
               حذف الفئة
             </button>
           </div>
         </div>
-
+  
         {/* Products section */}
         <div className="adm-section-row">
           <h2 className="adm-section-title">المنتجات</h2>
-          <button
-            className="adm-btn-base adm-btn-dark"
-            onClick={() => setOpenAddProduct(true)}
-          >
+          <button className="adm-btn-base adm-btn-dark" onClick={() => setOpenAddProduct(true)}>
             + إضافة منتج
           </button>
         </div>
-
+  
+        {/* Bulk delete bar — shown only when something is selected */}
+        {selectedIds.length > 0 && (
+          <div className="adm-bulk-bar">
+            <span>تم تحديد {selectedIds.length} منتج</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="adm-btn-base adm-btn-select-all" onClick={toggleSelectAll}>
+                {allSelected ? "إلغاء تحديد الكل" : "تحديد الكل"}
+              </button>
+              <button className="adm-btn-base adm-btn-delete" onClick={deleteSelected}>
+                حذف المحدد
+              </button>
+            </div>
+          </div>
+        )}
+  
         <div className="adm-product-list">
           {catProducts.length === 0 ? (
             <div className="adm-empty">لا توجد منتجات في هذه الفئة بعد</div>
           ) : (
             catProducts.map((product) => (
-              <div key={product.id} className="adm-product-card">
+              <div
+                key={product.id}
+                className="adm-product-card"
+                style={selectedIds.includes(product.id) ? { borderColor: "#ffc5c5", background: "#fff8f8" } : {}}
+              >
+                {/* Checkbox */}
+                <input
+                  type="checkbox"
+                  className="adm-checkbox"
+                  checked={selectedIds.includes(product.id)}
+                  onChange={() => toggleSelect(product.id)}
+                />
+  
                 <div className="adm-product-left">
-                  <img
-                    src={product.images?.[0]?.image_url}
-                    alt={product.title}
-                    className="adm-product-img"
-                  />
+                  <img src={product.images?.[0]?.image_url} alt={product.title} className="adm-product-img" />
                   <div className="adm-product-info">
                     <h2>{product.title}</h2>
                     <p>{product.price} دج</p>
                   </div>
                 </div>
-
+  
                 <div className="adm-product-actions">
-                  <button
-                    className="adm-btn-base adm-btn-edit"
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setOpenEditProduct(true);
-                    }}
-                  >
+                  <button className="adm-btn-base adm-btn-edit" onClick={() => { setSelectedProduct(product); setOpenEditProduct(true); }}>
                     تعديل
                   </button>
-                  <button
-                    className="adm-btn-base adm-btn-delete"
-                    onClick={() => deleteProduct(product.id)}
-                  >
+                  <button className="adm-btn-base adm-btn-delete" onClick={() => deleteProduct(product.id)}>
                     حذف
                   </button>
                 </div>
@@ -421,6 +478,17 @@ export default function Dashboard() {
             ))
           )}
         </div>
+  
+        {/* Select-all shortcut at the bottom when nothing selected yet */}
+        {catProducts.length > 1 && selectedIds.length === 0 && (
+          <button
+            className="adm-btn-base adm-btn-select-all adm-btn-outline"
+            style={{ marginTop: 16 }}
+            onClick={toggleSelectAll}
+          >
+            ☑ تحديد الكل
+          </button>
+        )}
       </>
     );
   };

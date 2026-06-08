@@ -205,7 +205,7 @@ export default function CategoryProducts() {
   const categoryId = categorySlug.split("-")[0];
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sort, setSort] = useState("default");
+  const [sort, setSort] = useState("price-asc");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -291,7 +291,7 @@ export default function CategoryProducts() {
                 onChange={(e) => setSort(e.target.value)}
               >
                 <option value="default">الترتيب الافتراضي</option>
-                <option value="price-asc">الأقل سعراً</option>
+                <option value="price-asc" >الأقل سعراً</option>
                 <option value="price-desc">الأعلى سعراً</option>
               </select>
             </div>
